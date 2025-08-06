@@ -1,0 +1,35 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Topic {
+  id        Int        @id @default(autoincrement())
+  name      String
+  questions Question[]
+}
+
+model Question {
+  id        Int       @id @default(autoincrement())
+  number    Int       // номер в тесте (1, 2, 3…)
+  text      String
+  imagePath String?   // если есть картинка — путь к ней
+  topic     Topic     @relation(fields: [topicId], references: [id])
+  topicId   Int       @map("topic_id")
+  answers   Answer[]
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int      @map("question_id")
+  label      String   // '1', '2', 'A', 'B', ...
+  text       String
+  isCorrect  Boolean  @default(false) @map("is_correct")
+}
