@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { IStatsOfQuestions } from ".";
+import { cn } from "@/lib/utils";
 
 interface INavigationProps {
   questions: IStatsOfQuestions[];
@@ -20,15 +21,14 @@ export const Navigation = ({
           <Button
             key={question.number}
             variant="outline"
-            className={`${
-              isActive ? "bg-blue-500 text-white" : "bg-gray-200"
-            } ${
-              question.isAnswered
-                ? question.isCorrect
-                  ? "bg-green-500 text-white"
-                  : "bg-red-400"
-                : ""
-            } `}
+            className={cn(
+              "bg-gray-200 transition-colors duration-300",
+              isActive && "bg-blue-500 text-white",
+              question.isAnswered &&
+                (question.isCorrect
+                  ? "bg-green-500 hover:bg-green-500 text-white"
+                  : "bg-red-400 hover:bg-red-400 text-white")
+            )}
             size="icon"
             disabled={isActive}
             onClick={() => onStepChange(question.number)}

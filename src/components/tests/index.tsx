@@ -1,11 +1,12 @@
 "use client";
 import { IQuestionDTO, TQuestionWithoutTopic } from "@/types";
 import { Navigation } from "./navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Question } from "./question";
 
 interface TestsProps {
   questions: TQuestionWithoutTopic[] | IQuestionDTO[];
+  setWrongAttempts?: React.Dispatch<React.SetStateAction<number>>;
 }
 export interface IStatsOfQuestions {
   number: number;
@@ -13,10 +14,10 @@ export interface IStatsOfQuestions {
   isCorrect: boolean;
 }
 
-export function Tests({ questions }: TestsProps) {
+export function Tests({ questions, setWrongAttempts }: TestsProps) {
   const [statsOfQuestions, setStatsOfQuestions] = useState<IStatsOfQuestions[]>(
     []
-  )
+  );
 
   const [step, setStep] = useState<number>(1);
   useEffect(() => {
@@ -39,6 +40,21 @@ export function Tests({ questions }: TestsProps) {
         q.number === step ? { ...q, isAnswered: true, isCorrect } : q
       )
     );
+    if (isCorrect) {
+      setTimeout(
+        () =>
+          setStep((prev) => {
+            const nextStep = prev + 1;
+            return questions.some((q) => q.number === nextStep)
+              ? nextStep
+              : prev;
+          }),
+        500
+      );
+    }
+    if (!isCorrect && setWrongAttempts) {
+      setWrongAttempts((prev) => prev + 1);
+    }
   };
 
   return (

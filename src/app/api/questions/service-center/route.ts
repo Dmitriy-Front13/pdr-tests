@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const requiredTopics = [
-    49, 2, 48, 46, 47, 17, 18, 35, 36, 34, 33, 21, 13, 8, 9,
+    49, 2, 48, 46, 47, 17, 18, 35, 36, 34, 33, 21, 13, 8, 9, 30, 39,
   ];
   const excludedTopics = [42, 43, 44, 45];
 

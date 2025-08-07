@@ -1,11 +1,13 @@
 "use client";
 import { Tests } from "@/components/tests";
-import { IQuestionResponse, TQuestionWithoutTopic } from "@/types";
-import { useEffect, useState } from "react";
+import { TQuestionWithoutTopic } from "@/types";
+import { useEffect, useRef, useState } from "react";
 
 export default function TestKindaServiceCenter() {
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<TQuestionWithoutTopic[]>([]);
+  const [wrongAttempts, setWrongAttempts] = useState<number>(0);
+  const hasMounted = useRef(false);
 
   async function load() {
     setLoading(true);
@@ -22,8 +24,20 @@ export default function TestKindaServiceCenter() {
     }
   }
   useEffect(() => {
-    load();
-  }, []);
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      load();
+      return;
+    }
+
+    if (wrongAttempts >= 2) {
+      const timeout = setTimeout(() => {
+        setWrongAttempts(0);
+        load();
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [wrongAttempts]);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -33,7 +47,7 @@ export default function TestKindaServiceCenter() {
   return (
     <>
       <h2>Як в МРЕО</h2>
-      <Tests questions={questions} />
+      <Tests questions={questions} setWrongAttempts={setWrongAttempts} />
     </>
   );
 }
