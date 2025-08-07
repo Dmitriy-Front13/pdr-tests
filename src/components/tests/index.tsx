@@ -1,11 +1,11 @@
 "use client";
-import { TQuestionWithoutTopic } from "@/types";
+import { IQuestionDTO, TQuestionWithoutTopic } from "@/types";
 import { Navigation } from "./navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Question } from "./question";
 
 interface TestsProps {
-  questions: TQuestionWithoutTopic[];
+  questions: TQuestionWithoutTopic[] | IQuestionDTO[];
 }
 export interface IStatsOfQuestions {
   number: number;
@@ -15,13 +15,20 @@ export interface IStatsOfQuestions {
 
 export function Tests({ questions }: TestsProps) {
   const [statsOfQuestions, setStatsOfQuestions] = useState<IStatsOfQuestions[]>(
-    questions.map((q) => ({
-      number: q.number,
-      isAnswered: false,
-      isCorrect: false,
-    }))
-  );
-  const [step, setStep] = useState(1);
+    []
+  )
+
+  const [step, setStep] = useState<number>(1);
+  useEffect(() => {
+    setStatsOfQuestions(
+      questions.map((q) => ({
+        number: q.number,
+        isAnswered: false,
+        isCorrect: false,
+      }))
+    );
+    setStep(questions[0].number);
+  }, [questions]);
   const question = questions.find((q) => q.number === step);
   const isAnswered = statsOfQuestions.find(
     (q) => q.number === step
@@ -43,11 +50,15 @@ export function Tests({ questions }: TestsProps) {
           setStep(newStep);
         }}
       />
-      <Question
-        question={question!}
-        handleAnswerSubmit={handleAnswerSubmit}
-        isAnswered={isAnswered || false}
-      />
+      {question ? (
+        <Question
+          question={question}
+          handleAnswerSubmit={handleAnswerSubmit}
+          isAnswered={isAnswered || false}
+        />
+      ) : (
+        "Виникла помилка: запитання не знайдено."
+      )}
     </div>
   );
 }

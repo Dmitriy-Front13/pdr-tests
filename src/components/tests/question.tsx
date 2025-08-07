@@ -1,8 +1,8 @@
-import { TQuestionWithoutTopic } from "@/types";
+import { IQuestionDTO, TQuestionWithoutTopic } from "@/types";
 import { AnswerButton } from "./answer-button";
 
 interface IQuestionProps {
-  question: TQuestionWithoutTopic;
+  question: TQuestionWithoutTopic | IQuestionDTO;
   handleAnswerSubmit: (isCorrect: boolean) => void;
   isAnswered: boolean;
 }
@@ -13,6 +13,9 @@ export const Question = ({
 }: IQuestionProps) => {
   return (
     <div className="grid grid-cols-2 gap-2 w-full">
+      {"topic" in question && (
+        <h5 className="font-bold col-span-2">Тема: {question.topic.name}</h5>
+      )}
       <h5 className="font-semibold col-span-2">{question.text}</h5>
       {question.imagePath && (
         <img
@@ -21,7 +24,11 @@ export const Question = ({
           className="col-span-1"
         />
       )}
-      <ul className="flex flex-col gap-1">
+      <ul
+        className={`flex flex-col gap-1 ${
+          question.imagePath ? "col-span-1" : "col-span-2"
+        }`}
+      >
         {question.answers.map((answer) => (
           <li key={answer.id}>
             <AnswerButton

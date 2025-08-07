@@ -25,7 +25,7 @@ export const Navigation = ({
             } ${
               question.isAnswered
                 ? question.isCorrect
-                  ? "bg-green-500"
+                  ? "bg-green-500 text-white"
                   : "bg-red-400"
                 : ""
             } `}

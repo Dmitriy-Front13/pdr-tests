@@ -14,6 +14,10 @@ export async function onSearch(query: string) {
       include: {
         answers: {
           select: { id: true, label: true, text: true, isCorrect: true },
+          orderBy: { label: "asc" },
+        },
+        topic: {
+          select: { name: true },
         },
       },
     });

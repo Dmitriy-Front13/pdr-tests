@@ -17,7 +17,7 @@ export const AnswerButton = ({
   return (
     <Button
       variant="outline"
-      className={`w-full justify-start transition-all ${
+      className={`w-full justify-start transition-all h-fit whitespace-normal text-left ${
         isClicked
           ? answer.isCorrect
             ? "bg-green-500 text-white hover:bg-green-600"

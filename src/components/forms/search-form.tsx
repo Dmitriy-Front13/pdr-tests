@@ -1,10 +1,10 @@
 import { onSearch } from "@/app/actions";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { TQuestionWithoutTopic } from "@/types";
+import { IQuestionDTO } from "@/types";
 
 interface SearchFormProps {
-  setQuestions: (questions: TQuestionWithoutTopic[]) => void;
+  setQuestions: (questions: IQuestionDTO[]) => void;
 }
 export const SearchForm = ({ setQuestions }: SearchFormProps) => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

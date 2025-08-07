@@ -1,6 +1,7 @@
 import { Answer, Question, Topic } from "@prisma/client";
 
-export interface IQuestionDTO extends Question {
+type TQuestion = Omit<Question, "topicId">;
+export interface IQuestionDTO extends TQuestion {
   topic: Omit<Topic, "id">;
   answers: TAnswerDTO[];
 }
