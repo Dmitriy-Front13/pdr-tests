@@ -1,7 +1,7 @@
 "use client";
 import { IQuestionDTO, TQuestionWithoutTopic } from "@/types";
 import { Navigation } from "./navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Question } from "./question";
 
 interface TestsProps {
@@ -18,6 +18,7 @@ export function Tests({ questions, setWrongAttempts }: TestsProps) {
   const [statsOfQuestions, setStatsOfQuestions] = useState<IStatsOfQuestions[]>(
     []
   );
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [step, setStep] = useState<number>(1);
   useEffect(() => {
@@ -35,13 +36,16 @@ export function Tests({ questions, setWrongAttempts }: TestsProps) {
     (q) => q.number === step
   )?.isAnswered;
   const handleAnswerSubmit = (isCorrect: boolean) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setStatsOfQuestions((prev) =>
       prev.map((q) =>
         q.number === step ? { ...q, isAnswered: true, isCorrect } : q
       )
     );
     if (isCorrect) {
-      setTimeout(
+      timeoutRef.current = setTimeout(
         () =>
           setStep((prev) => {
             const nextStep = prev + 1;
@@ -56,6 +60,14 @@ export function Tests({ questions, setWrongAttempts }: TestsProps) {
       setWrongAttempts((prev) => prev + 1);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-center gap-4 max-w-7xl w-full">
