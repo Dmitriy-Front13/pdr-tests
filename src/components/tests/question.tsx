@@ -12,11 +12,11 @@ export const Question = ({
   isAnswered,
 }: IQuestionProps) => {
   return (
-    <div className="grid grid-cols-2 gap-2 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
       {"topic" in question && (
-        <h5 className="font-bold col-span-2">Тема: {question.topic.name}</h5>
+        <h5 className="font-bold sm:ol-span-2">Тема: {question.topic.name}</h5>
       )}
-      <h5 className="font-semibold col-span-2">{question.text}</h5>
+      <h5 className="font-semibold sm:col-span-2">{question.text}</h5>
       {question.imagePath && (
         <img
           src={`/uploads/${question.imagePath}`}
@@ -26,7 +26,7 @@ export const Question = ({
       )}
       <ul
         className={`flex flex-col gap-1 ${
-          question.imagePath ? "col-span-1" : "col-span-2"
+          question.imagePath ? "col-span-1" : "sm:col-span-2"
         }`}
       >
         {question.answers.map((answer) => (

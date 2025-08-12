@@ -18,8 +18,8 @@ export default function AdminAnswersPage() {
       const res = await fetch(`/api/questions/${topicId}`);
       const json = await res.json();
       setRows(json.data);
-    } catch (e: any) {
-      setError(e?.message ?? "Помилка завантаження");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Помилка завантаження");
     } finally {
       setLoading(false);
     }

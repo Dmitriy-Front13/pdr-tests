@@ -31,3 +31,28 @@ export async function onSearch(query: string) {
     return [];
   }
 }
+
+export const getQuestionsByTopic = async (topicId: string) => {
+  const id = Number(topicId);
+  try {
+    const data = await prisma.topic.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        questions: {
+          orderBy: [{ number: "asc" }],
+          include: {
+            answers: {
+              orderBy: { label: "asc" },
+              select: { id: true, label: true, text: true, isCorrect: true },
+            },
+          },
+        },
+      },
+    });
+    return data;
+  } catch (error) {
+    return null;
+  }
+};
