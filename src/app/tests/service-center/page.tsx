@@ -30,7 +30,7 @@ export default function TestKindaServiceCenter() {
       return;
     }
 
-    if (wrongAttempts >= 2) {
+    if (wrongAttempts >= 3) {
       const timeout = setTimeout(() => {
         setWrongAttempts(0);
         load();
